@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgii Gerasimov - Interactive Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #Fdfbf7;
+            color: #2D3748;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .interactive-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .interactive-card:hover {
+            transform: translateX(4px);
+            background-color: #F7FAFC;
+        }
+        .interactive-card.active {
+            border-left: 4px solid #D69E2E;
+            background-color: #FFFAF0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .lang-btn {
+            transition: all 0.2s;
+            opacity: 0.6;
+        }
+        .lang-btn.active {
+            opacity: 1;
+            font-weight: bold;
+            color: #D69E2E;
+        }
+
+        .engine-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .ue5-tag { background-color: #000000; color: #ffffff; }
+        .unity-tag { background-color: #808080; color: #ffffff; }
+        .godot-tag { background-color: #478cbf; color: #ffffff; }
+
+        .project-link:not(.disabled):hover {
+            border-color: #D69E2E;
+            transform: translateY(-2px);
+        }
+        .project-link.disabled {
+            cursor: default;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
+
+    <main class="w-full max-w-6xl bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+        
+        <!-- Top Nav -->
+        <nav class="bg-gray-900 text-white px-8 py-3 flex justify-between items-center">
+            <div class="text-xs tracking-widest uppercase text-gray-400">System.Gerasimov_v3.4</div>
+            <div class="flex gap-4">
+                <button onclick="setLanguage('ru')" id="btn-ru" class="lang-btn text-sm font-bold">RU</button>
+                <span class="text-gray-600">|</span>
+                <button onclick="setLanguage('en')" id="btn-en" class="lang-btn text-sm font-bold">EN</button>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <header class="bg-gray-800 text-white p-8">
+            <div class="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8">
+                <!-- Photo & Basic Info -->
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                    <img src="photo_2023-03-14_11-25-48.jpg" alt="Georgii Gerasimov" class="w-32 h-32 rounded-full object-cover border-4 border-gray-600 shadow-lg flex-shrink-0">
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-3xl md:text-4xl font-bold mb-2" data-i18n="name">Георгий Герасимов</h1>
+                        <p class="text-xl text-gray-300 mb-4" data-i18n="role">Геймдизайнер / Левелдизайнер</p>
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-4 text-sm text-gray-400">
+                            <span class="flex items-center gap-1">📍 <span data-i18n="location">Белград, Сербия</span></span>
+                            <span class="flex items-center gap-1">✉️ georg1000@mail.ru</span>
+                            <span class="flex items-center gap-1">🎨 <a href="https://sketchfab.com/georg1000/models" target="_blank" class="text-yellow-400 hover:underline">Sketchfab</a></span>
+                            <span class="flex items-center gap-1">🔗 <a href="https://www.linkedin.com/in/georgii-gerasimov-b87392138/" target="_blank" class="text-yellow-400 hover:underline">LinkedIn</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Block -->
+                <div class="w-full lg:w-auto bg-gray-700/50 border border-gray-600 rounded-lg p-5 max-w-md relative flex-shrink-0">
+                    <h3 class="text-yellow-400 font-semibold text-xs uppercase tracking-widest mb-2" data-i18n="statusTitle">Статус персонажа</h3>
+                    <p class="text-sm italic leading-relaxed text-gray-200" data-i18n="statusDesc">
+                        "Геймдизайнер с опытом работы в tinyBuild, MoonMoose и ROAR Games. Прошел обучение в Wargaming Academy. Занимаюсь системным дизайном (C#, Blueprints) и созданием уровней. Основной движок — Unreal Engine 5."
+                    </p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Current Availability -->
+        <section class="p-6 bg-yellow-50 border-b border-yellow-100 flex items-center gap-4">
+            <div class="p-2 bg-yellow-400 rounded-full animate-pulse"></div>
+            <div>
+                <h4 class="font-bold text-gray-800 text-xs uppercase tracking-wider" data-i18n="currentStatusLabel">Текущий квест</h4>
+                <p class="text-sm text-gray-700" data-i18n="currentStatusValue">Разработка собственных проектов. Открыт для предложений по Middle+/Senior позициям.</p>
+            </div>
+        </section>
+
+        <!-- Skills Dashboard -->
+        <section class="p-8 bg-gray-50">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                <span data-i18n="skillsTitle">Матрица Навыков</span>
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-sm font-bold mb-4 uppercase text-gray-500 tracking-widest text-center" data-i18n="chart1Title">Специализация</h3>
+                    <div class="chart-container">
+                        <canvas id="skillsRadarChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                    <h3 class="text-sm font-bold mb-4 uppercase text-gray-500 tracking-widest text-center" data-i18n="chart2Title">Технический Стек</h3>
+                    <div class="chart-container">
+                        <canvas id="toolsBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="p-8">
+            <h2 class="text-2xl font-bold mb-6" data-i18n="expTitle">Журнал Квестов (Опыт)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <div class="md:col-span-4 flex flex-col gap-3" id="experience-nav"></div>
+                <div class="md:col-span-8 bg-white border border-gray-200 rounded-xl p-6 min-h-[400px] shadow-sm">
+                    <div id="experience-content"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inventory -->
+        <section class="p-8 border-t border-gray-200">
+            <h2 class="text-2xl font-bold mb-6" data-i18n="inventoryTitle">Инвентарь & Характеристики</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Education & Languages -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-4 border-b pb-2 text-sm uppercase tracking-wider" data-i18n="eduHeader">🎓 Обучение</h3>
+                        <div class="space-y-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                <div class="text-md font-bold text-gray-800" data-i18n="eduWargaming">Wargaming Academy</div>
+                                <div class="text-xs text-yellow-600 font-semibold mb-2 uppercase" data-i18n="eduWargamingCourse">Геймдизайн (2019-2020)</div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                <div class="text-md font-bold text-gray-800" data-i18n="eduUni">СПбГУП (Специалитет)</div>
+                                <div class="text-xs text-yellow-600 font-semibold mb-2 uppercase" data-i18n="eduUniCourse">Режиссура мультимедиа (2016-2021)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-gray-700 mb-4 border-b pb-2 text-sm uppercase tracking-wider" data-i18n="langHeader">🗣️ Языки</h3>
+                        <div class="flex gap-4">
+                            <div class="flex-1 bg-white p-3 rounded-lg border border-gray-200 text-center shadow-sm">
+                                <div class="font-bold text-sm" data-i18n="langRu">Русский</div>
+                                <div class="text-[10px] text-gray-400 uppercase font-bold" data-i18n="langRuLevel">Native</div>
+                            </div>
+                            <div class="flex-1 bg-white p-3 rounded-lg border border-gray-200 text-center shadow-sm">
+                                <div class="font-bold text-sm" data-i18n="langEn">English</div>
+                                <div class="text-[10px] text-gray-400 uppercase font-bold" data-i18n="langEnLevel">Intermediate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Projects List -->
+                <div>
+                    <h3 class="font-bold text-gray-700 mb-4 border-b pb-2 text-sm uppercase tracking-wider" data-i18n="projectsHeader">📂 Проекты</h3>
+                    <div class="space-y-4" id="projects-list"></div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="bg-gray-50 p-6 text-center text-[10px] text-gray-400 uppercase tracking-widest border-t border-gray-100">
+            <p>© Georgii Gerasimov // 2026 // Belgrade, Serbia</p>
+        </footer>
+    </main>
+
+    <script>
+        const translations = {
+            ru: {
+                name: "Георгий Герасимов",
+                role: "Геймдизайнер / Левелдизайнер",
+                location: "Белград, Сербия",
+                statusTitle: "Статус персонажа",
+                statusDesc: '"Геймдизайнер с опытом работы в tinyBuild, MoonMoose и ROAR Games. Прошел обучение в Wargaming Academy. Занимаюсь системным дизайном (C#, Blueprints) и созданием уровней. Основной движок — Unreal Engine 5."',
+                currentStatusLabel: "Текущий квест",
+                currentStatusValue: "Разработка собственных проектов. Открыт для предложений по Middle+/Senior позициям.",
+                skillsTitle: "Матрица Навыков",
+                chart1Title: "Специализация",
+                chart2Title: "Технический Стек",
+                chartLabels1: ['Level Design', 'System Design', 'Blueprints', 'GDD', 'Technical GD / RnD', 'AI / Combat'],
+                chartLabels2: ['Unreal Engine 5', 'Unity', 'Blueprints', 'C#', 'C++', 'Godot'],
+                expTitle: "Журнал Квестов (Опыт)",
+                inventoryTitle: "Инвентарь & Характеристики",
+                eduHeader: "🎓 Обучение",
+                eduWargaming: "Wargaming Academy",
+                eduWargamingCourse: "Геймдизайн (2019-2020)",
+                eduUni: "СПбГУП (Специалитет)",
+                eduUniCourse: "Режиссура мультимедиа (2016-2021)",
+                langHeader: "🗣️ Языки",
+                langRu: "Русский",
+                langRuLevel: "Родной",
+                langEn: "Английский",
+                langEnLevel: "Intermediate",
+                projectsHeader: "📂 Проекты",
+                projects: [
+                    { name: "Die to play", status: "In Development", desc: Инди-проект. Сейчас в разработке", engine: "unity", url: null },
+                    { name: "Pet-project (Godot)", status: "In Development (Experiment)", desc: "Экспериментальный проект, исследование нового движка", engine: "godot", url: null },
+                    { name: "Tenet of the Spark", status: "Announced", desc: "Экшен-адвенчура со сменой эпох", engine: "ue5", url: "https://www.youtube.com/watch?v=0MR2nwZ0zIE" },
+                    { name: "Cash Cleaner Simulator", status: "Released", desc: "Симулятор с глубоким физическим взаимодействием", engine: "ue5", url: "https://www.youtube.com/watch?v=loTF1yBzlMg" },
+                    { name: "Hello Engineer", status: "Released", desc: "Строительная песочница во вселенной Hello Neighbor", engine: "unity", url: "https://www.youtube.com/watch?v=5jFJgcN8-L8" }
+                ],
+                exp: [
+                    { 
+                        company: 'ROAR Games', 
+                        project: 'Tenet of the Spark', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'апр 2024 — май 2025',
+                        engine: 'Unreal Engine 5',
+                        tasks: [
+                            'Создание блокингов локаций',
+                            'Интеграция ассетов (модели и анимации)',
+                            'Настройка поведения противников с использованием StateTree и Gameplay Ability System (GAS)',
+                            'Прототипирование пазлов, новых противников и игровых механик',
+                            'Настройка AI и балансировка сложности боевых сцен'
+                        ] 
+                    },
+                    { 
+                        company: 'Moon Moose', 
+                        project: 'Cash Cleaner Simulator', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'окт 2023 — фев 2024',
+                        engine: 'Unreal Engine 5',
+                        tasks: [
+                            'Левел-Дизайн (редактировал и адаптировал существующие пространства под новые сущности)',
+                            'Написание документации',
+                            'RnD и техническое прототипирование фичей и систем на Blueprints',
+                            'Настройка физических параметров объектов и коллизий для правильного или "весёлого" поведения'
+                        ] 
+                    },
+                    { 
+                        company: 'tinyBuild GAMES', 
+                        project: 'Hello Engineer / Concepts', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'апр 2021 — окт 2023',
+                        engine: 'Unity / Unreal Engine 5',
+                        subsections: [
+                            {
+                                title: "Hello Engineer (Unity)",
+                                tasks: [
+                                    'Создание и ведение ГДД для Hello Engineer',
+                                    'Левел-дизайн (от блокинга до итоговой реализации)'
+                                ]
+                            },
+                            {
+                                title: "Concepts (Unreal Engine 5)",
+                                tasks: [
+                                    'Работа над пре-продакшеном выживача с зомби: редактирование ландшафта, прототипирование сущностей',
+                                    'Интеграция контента (модели, звуки, анимации) и настройка ИИ на Behavior Tree',
+                                    'Прототипирование новых концептов'
+                                ]
+                            }
+                        ]
+                    },
+                    { 
+                        company: 'LenVR / RosVR', 
+                        project: 'VR Showcases', 
+                        role: 'Junior Game Designer / Intern', 
+                        period: '2020 — 2021',
+                        engine: 'Unreal Engine 4',
+                        tasks: [
+                            'Разработка VR-шоукейсов на Unreal Engine 4',
+                            'Сборка дипломного проекта на Unreal Engine 5 Early Access',
+                            'Первый опыт коммерческой разработки и работы с заказчиками'
+                        ] 
+                    }
+                ]
+            },
+            en: {
+                name: "Georgii Gerasimov",
+                role: "Game Designer / Level Designer",
+                location: "Belgrade, Serbia",
+                statusTitle: "Character Status",
+                statusDesc: '"Game designer with experience at tinyBuild, MoonMoose, and ROAR Games. Trained at Wargaming Academy. I focus on system design (C#, Blueprints) and level creation. My main engine is Unreal Engine 5."',
+                currentStatusLabel: "Current Quest",
+                currentStatusValue: "Developing personal projects. Open to Middle+/Senior positions.",
+                skillsTitle: "Skill Matrix",
+                chart1Title: "Specialization",
+                chart2Title: "Tech Stack",
+                chartLabels1: ['Level Design', 'System Design', 'Blueprints', 'GDD', 'Technical GD / RnD', 'AI / Combat'],
+                chartLabels2: ['Unreal Engine 5', 'Unity', 'Blueprints', 'C#', 'C++', 'Godot'],
+                expTitle: "Quest Log (Experience)",
+                inventoryTitle: "Inventory & Stats",
+                eduHeader: "🎓 Training",
+                eduWargaming: "Wargaming Academy",
+                eduWargamingCourse: "Game Design (2019-2020)",
+                eduUni: "Saint-Petersburg University of Humanities and Social Sciences",
+                eduUniCourse: "Multimedia Directing (2016-2021)",
+                langHeader: "🗣️ Languages",
+                langRu: "Russian",
+                langRuLevel: "Native",
+                langEn: "English",
+                langEnLevel: "Intermediate",
+                projectsHeader: "📂 Projects",
+                projects: [
+                    { name: "Die to play", status: "In Development", desc: "Currently in development. Indie-project", engine: "unity", url: null },
+                    { name: "Pet-project (Godot)", status: "In Development (Experiment)", desc: "Experimental project exploring a new engine", engine: "godot", url: null },
+                    { name: "Tenet of the Spark", status: "Announced", desc: "Action-adventure with era-switching", engine: "ue5", url: "https://www.youtube.com/watch?v=0MR2nwZ0zIE" },
+                    { name: "Cash Cleaner Simulator", status: "Released", desc: "Deep physics-based simulator", engine: "ue5", url: "https://www.youtube.com/watch?v=loTF1yBzlMg" },
+                    { name: "Hello Engineer", status: "Released", desc: "Sandbox constructor in the Hello Neighbor universe", engine: "unity", url: "https://www.youtube.com/watch?v=5jFJgcN8-L8" }
+                ],
+                exp: [
+                    { 
+                        company: 'ROAR Games', 
+                        project: 'Tenet of the Spark', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'Apr 2024 — May 2025',
+                        engine: 'Unreal Engine 5',
+                        tasks: [
+                            'Location blockouts creation',
+                            'Asset integration (models and animations)',
+                            'Enemy behavior configuration using StateTree and GAS',
+                            'Prototyping puzzles, new enemies, and gameplay mechanics',
+                            'AI setup and combat encounter balancing'
+                        ] 
+                    },
+                    { 
+                        company: 'Moon Moose', 
+                        project: 'Cash Cleaner Simulator', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'Oct 2023 — Feb 2024',
+                        engine: 'Unreal Engine 5',
+                        tasks: [
+                            'Level Design (editing and adapting existing spaces for new entities)',
+                            'Documentation writing',
+                            'RnD and technical prototyping of features and systems on Blueprints',
+                            'Setting physical parameters of objects and collisions for proper or "fun" behavior'
+                        ] 
+                    },
+                    { 
+                        company: 'tinyBuild GAMES', 
+                        project: 'Hello Engineer / Concepts', 
+                        role: 'Game Designer / Level Designer', 
+                        period: 'Apr 2021 — Oct 2023',
+                        engine: 'Unity / Unreal Engine 5',
+                        subsections: [
+                            {
+                                title: "Hello Engineer (Unity)",
+                                tasks: [
+                                    'GDD creation and maintenance for Hello Engineer',
+                                    'Level design (from blockout to final implementation)'
+                                ]
+                            },
+                            {
+                                title: "Concepts (Unreal Engine 5)",
+                                tasks: [
+                                    'Work on zombie survival pre-production: terrain editing, entity prototyping',
+                                    'Content integration and AI setup using Behavior Trees',
+                                    'Prototyping new concepts'
+                                ]
+                            }
+                        ]
+                    },
+                    { 
+                        company: 'LenVR / RosVR', 
+                        project: 'VR Showcases', 
+                        role: 'Junior Game Designer / Intern', 
+                        period: '2020 — 2021',
+                        engine: 'Unreal Engine 4',
+                        tasks: [
+                            'Developing VR showcases on Unreal Engine 4',
+                            'Graduation project assembly on Unreal Engine 5 Early Access',
+                            'Initial commercial development experience'
+                        ] 
+                    }
+                ]
+            }
+        };
+
+        let currentLang = 'ru';
+        let charts = {};
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) el.innerText = translations[lang][key];
+            });
+            updateCharts();
+            initExperience();
+            renderProjects();
+        }
+
+        function updateCharts() {
+            const radarData = [95, 88, 92, 85, 93, 82];
+            const barData = [98, 85, 95, 80, 35, 45];
+            
+            if (charts.radar) charts.radar.destroy();
+            if (charts.bar) charts.bar.destroy();
+            charts.radar = new Chart(document.getElementById('skillsRadarChart'), {
+                type: 'radar',
+                data: {
+                    labels: translations[currentLang].chartLabels1,
+                    datasets: [{ data: radarData, fill: true, backgroundColor: 'rgba(214, 158, 46, 0.2)', borderColor: 'rgb(214, 158, 46)' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { suggestedMin: 0, suggestedMax: 100, ticks: { display: false } } } }
+            });
+            charts.bar = new Chart(document.getElementById('toolsBarChart'), {
+                type: 'bar',
+                data: {
+                    labels: translations[currentLang].chartLabels2,
+                    datasets: [{ data: barData, backgroundColor: 'rgba(45, 55, 72, 0.8)' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+            });
+        }
+
+        function initExperience() {
+            const nav = document.getElementById('experience-nav');
+            nav.innerHTML = '';
+            translations[currentLang].exp.forEach((job, i) => {
+                const btn = document.createElement('div');
+                btn.className = `interactive-card p-4 rounded-lg bg-white border border-gray-100 mb-2 ${i === 0 ? 'active' : ''}`;
+                btn.innerHTML = `
+                    <div class="font-bold text-sm">${job.company}</div>
+                    <div class="text-[10px] text-gray-400 uppercase font-bold">${job.project}</div>`;
+                btn.onclick = () => {
+                    document.querySelectorAll('#experience-nav div').forEach(d => d.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderExpDetails(job);
+                };
+                nav.appendChild(btn);
+            });
+            renderExpDetails(translations[currentLang].exp[0]);
+        }
+
+        function renderExpDetails(job) {
+            const engineTags = job.engine ? job.engine.split(' / ').map(e => {
+                let tagClass = 'ue5-tag';
+                if (e.toLowerCase().includes('unity')) tagClass = 'unity-tag';
+                if (e.toLowerCase().includes('godot')) tagClass = 'godot-tag';
+                return `<span class="engine-tag ${tagClass} mr-2">${e}</span>`;
+            }).join('') : '';
+            
+            let tasksContent = '';
+            if (job.subsections) {
+                tasksContent = job.subsections.map(sub => `
+                    <div class="mt-4 first:mt-0">
+                        <h4 class="text-sm font-bold text-gray-800 mb-2 border-l-2 border-yellow-500 pl-2 uppercase tracking-tight">${sub.title}</h4>
+                        <ul class="space-y-3 pl-2">
+                            ${sub.tasks.map(t => `<li class="flex items-start gap-3 text-sm text-gray-600"><span class="mt-1.5 w-1.5 h-1.5 bg-yellow-500 rounded-full flex-shrink-0"></span>${t}</li>`).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+            } else if (job.tasks) {
+                tasksContent = `
+                    <ul class="space-y-3">
+                        ${job.tasks.map(t => `<li class="flex items-start gap-3 text-sm text-gray-600"><span class="mt-1.5 w-1.5 h-1.5 bg-yellow-500 rounded-full flex-shrink-0"></span>${t}</li>`).join('')}
+                    </ul>
+                `;
+            }
+
+            document.getElementById('experience-content').innerHTML = `
+                <div>
+                    <h3 class="text-xl font-bold">${job.role}</h3>
+                    <div class="text-xs text-gray-400 mb-3">${job.period} | ${job.company}</div>
+                    <div class="mb-4">${engineTags}</div>
+                    ${tasksContent}
+                </div>`;
+        }
+
+        function renderProjects() {
+            const container = document.getElementById('projects-list');
+            container.innerHTML = '';
+            translations[currentLang].projects.forEach(p => {
+                const isClickable = p.url !== null;
+                const engineClass = p.engine === 'godot' ? 'godot-tag' : (p.engine === 'unity' ? 'unity-tag' : 'ue5-tag');
+                const el = document.createElement(isClickable ? 'a' : 'div');
+                if (isClickable) { el.href = p.url; el.target = "_blank"; }
+                el.className = `block bg-white p-4 rounded-lg border border-gray-100 shadow-sm transition-all project-link ${!isClickable ? 'disabled opacity-75' : 'border-l-4 border-l-yellow-400'}`;
+                
+                const displayEngine = p.engine === 'ue5' ? 'UNREAL ENGINE 5' : p.engine.toUpperCase();
+
+                el.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-bold text-gray-800 text-sm">${p.name}</h4>
+                        <span class="engine-tag ${engineClass}">${displayEngine}</span>
+                    </div>
+                    <div class="text-[9px] font-bold text-yellow-600 uppercase mb-1">${p.status}</div>
+                    <p class="text-[11px] text-gray-500 leading-tight">${p.desc}</p>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        window.onload = () => setLanguage('ru');
+    </script>
+</body>
+</html>
