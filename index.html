@@ -99,7 +99,12 @@
             <div class="flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8">
                 <!-- Photo & Basic Info -->
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                    <div class="profile-photo-container">
                     <img src="profile_pic.png" alt="Georgii Gerasimov" class="profile-photo">
+                    </div>
+                    <div id="level-badge" class="absolute -bottom-2 -right-2 bg-yellow-500 text-gray-900 text-[10px] font-black px-3 py-1.5 rounded shadow-lg border-2 border-gray-900 uppercase">
+                        LVL 0
+                    </div>
                     <div class="text-center sm:text-left">
                         <h1 class="text-3xl md:text-4xl font-bold mb-2" data-i18n="name">Георгий Герасимов</h1>
                         <p class="text-xl text-gray-300 mb-4" data-i18n="role">Геймдизайнер / Левелдизайнер</p>
@@ -417,6 +422,17 @@
         let currentLang = 'ru';
         let charts = {};
 
+        function calculateLevel() {
+            const birthDate = new Date(1998, 7, 6); // 6 Августа 1998 (месяцы 0-11)
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const m = today.getMonth() - birthDate.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            document.getElementById('level-badge').innerText = `LVL ${age}`;
+        }
+        
         function setLanguage(lang) {
             currentLang = lang;
             document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
