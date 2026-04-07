@@ -559,7 +559,10 @@
             });
         }
 
-        window.onload = () => setLanguage('ru');
+        window.onload = () => {
+            calculateLevel();
+            setLanguage('ru');
+        };
     </script>
 </body>
 </html>
