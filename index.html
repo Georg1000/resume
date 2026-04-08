@@ -248,11 +248,9 @@
                     <span data-i18n="skillsTitle">Навыки</span>
                     <span class="h-[1px] flex-grow bg-gray-100"></span>
                 </h3>
-                <div class="flex flex-wrap gap-3">
-                    <!-- High Priority -->
+                <div id="skills-container" class="flex flex-wrap gap-3">
                     <span class="skill-tag skill-priority-high skill-dev">Unity</span>
                     <span class="skill-tag skill-priority-high skill-dev">Unreal Engine 5</span>
-                    <!-- Mid Priority -->
                     <span class="skill-tag skill-priority-mid skill-dev">Godot</span>
                     <span class="skill-tag skill-priority-mid skill-design">Photoshop</span>
                     <span class="skill-tag skill-priority-mid skill-video">Adobe Premiere Pro</span>
@@ -628,8 +626,38 @@
             });
         }
 
+        function randomizeSkills() {
+            const container = document.getElementById('skills-container');
+            if (!container) return;
+            
+            const tags = Array.from(container.children);
+            const mainTags = [];
+            const otherTags = [];
+            
+            // Разделяем теги на "Main" и "Остальные"
+            tags.forEach(tag => {
+                if (tag.classList.contains('skill-main')) {
+                    mainTags.push(tag);
+                } else {
+                    otherTags.push(tag);
+                }
+            });
+            
+            // Перемешиваем только остальные теги (алгоритм Фишера-Йейтса)
+            for (let i = otherTags.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [otherTags[i], otherTags[j]] = [otherTags[j], otherTags[i]];
+            }
+            
+            // Очищаем контейнер и добавляем теги обратно
+            container.innerHTML = '';
+            mainTags.forEach(tag => container.appendChild(tag));
+            otherTags.forEach(tag => container.appendChild(tag));
+        }
+
         window.onload = () => {
             calculateLevel();
+            randomizeSkills();
             setLanguage('ru');
         };
     </script>
