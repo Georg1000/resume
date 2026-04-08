@@ -86,6 +86,29 @@
             border: 4px solid #4a5568;
             background-color: #2d3748;
         }
+        .skill-tag {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            font-weight: 700;
+            transition: all 0.2s;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .skill-priority-high { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+        .skill-priority-mid { padding: 0.35rem 1rem; font-size: 0.75rem; }
+        
+        /* Цвета категорий */
+        .skill-main { background-color: #fef3c7; color: #92400e; border-color: #fde68a; } 
+        .skill-dev { background-color: #ebf8ff; color: #2b6cb0; border-color: #bee3f8; }
+        .skill-design { background-color: #f0fff4; color: #2f855a; border-color: #c6f6d5; }
+        .skill-video { background-color: #fff5f5; color: #c53030; border-color: #fed7d7; }
+        .skill-other { background-color: #f3e8ff; color: #7e22ce; border-color: #e9d5ff; }
+        .skill-3d { background-color: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
+        .skill-pm { background-color: #f3f4f6; color: #374151; border-color: #d1d5db; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col items-center py-8 px-4 sm:px-6 lg:px-8">
@@ -219,6 +242,47 @@
                 </div>
             </div>
         </section>
+        <section class="px-8 pt-10 pb-6 border-b border-gray-100 bg-white">
+            <div class="max-w-4xl mx-auto">
+                <h3 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-3">
+                    <span data-i18n="skillsTitle">Навыки</span>
+                    <span class="h-[1px] flex-grow bg-gray-100"></span>
+                </h3>
+                <div class="flex flex-wrap gap-3">
+                    <!-- High Priority -->
+                    <span class="skill-tag skill-priority-high skill-dev">Unity</span>
+                    <span class="skill-tag skill-priority-high skill-dev">Unreal Engine 5</span>
+                    <!-- Mid Priority -->
+                    <span class="skill-tag skill-priority-mid skill-dev">Godot</span>
+                    <span class="skill-tag skill-priority-mid skill-design">Photoshop</span>
+                    <span class="skill-tag skill-priority-mid skill-video">Adobe Premiere Pro</span>
+                    <span class="skill-tag skill-priority-mid skill-video">Adobe After Effects</span>
+                    <span class="skill-tag skill-priority-high skill-other">RnD</span>
+                    <span class="skill-tag skill-priority-high skill-other">Excel</span>
+                    <span class="skill-tag skill-priority-high skill-main">Level Design</span>
+                    <span class="skill-tag skill-priority-high skill-main">Game Design</span>
+                    <span class="skill-tag skill-priority-high skill-main">Technical Game Design</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Multiplayer Games Development</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Directing</span>
+                    <span class="skill-tag skill-priority-high skill-main">Playtesting</span>
+                    <span class="skill-tag skill-priority-high skill-main">Prototyping</span>
+                    <span class="skill-tag skill-priority-high skill-main">GDD</span>
+                    <span class="skill-tag skill-priority-high skill-main">UI Prototyping</span>
+                    <span class="skill-tag skill-priority-mid skill-other">C#</span>
+                    <span class="skill-tag skill-priority-mid skill-3d">Blender</span>
+                    <span class="skill-tag skill-priority-mid skill-3d">Maya</span>
+                    <span class="skill-tag skill-priority-mid skill-3d">3ds Max</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Git</span>
+                    <span class="skill-tag skill-priority-mid skill-pm">JIRA</span>
+                    <span class="skill-tag skill-priority-mid skill-pm">YouTrack</span>
+                    <span class="skill-tag skill-priority-mid skill-pm">Monday</span>
+                    <span class="skill-tag skill-priority-mid skill-pm">Trello</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Confluence</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Notion</span>
+                    <span class="skill-tag skill-priority-mid skill-other">Google Sheets</span>
+                </div>
+            </div>
+        </section>
         
         <footer class="bg-gray-50 p-6 text-center text-[10px] text-gray-400 uppercase tracking-widest border-t border-gray-100">
             <p>© Georgii Gerasimov // 2026 // Belgrade, Serbia</p>
@@ -231,11 +295,12 @@
                 name: "Георгий Герасимов",
                 role: "Геймдизайнер / Левелдизайнер",
                 location: "Белград, Сербия",
+                skillsTitle: "Навыки",
                 statusTitle: "Статус персонажа",
                 statusDesc: '"Геймдизайнер с опытом работы в tinyBuild, MoonMoose и ROAR Games. Прошел обучение в Wargaming Academy. Занимаюсь системным дизайном (C#, Blueprints) и созданием уровней. Основной движок — Unreal Engine."',
                 currentStatusLabel: "Текущий квест",
                 currentStatusValue: "Разработка собственных проектов. Открыт для предложений по Middle+/Senior позициям.",
-                skillsTitle: "Матрица Навыков",
+                skillsTitle: "Матрица Основных Навыков",
                 chart1Title: "Специализация",
                 chart2Title: "Технический Стек",
                 chartLabels1: ['Level Design', 'System Design', 'Blueprints', 'GDD', 'Technical GD / RnD', 'AI / Combat'],
@@ -331,11 +396,12 @@
                 name: "Georgii Gerasimov",
                 role: "Game Designer / Level Designer",
                 location: "Belgrade, Serbia",
+                skillsTitle: "Skills",
                 statusTitle: "Character Status",
                 statusDesc: '"Game designer with experience at tinyBuild, MoonMoose, and ROAR Games. Trained at Wargaming Academy. I focus on system design (C#, Blueprints) and level creation. My main engine is Unreal Engine."',
                 currentStatusLabel: "Current Quest",
                 currentStatusValue: "Developing personal projects. Open to Middle+/Senior positions.",
-                skillsTitle: "Skill Matrix",
+                skillsTitle: "Main Skills Matrix",
                 chart1Title: "Specialization",
                 chart2Title: "Tech Stack",
                 chartLabels1: ['Level Design', 'System Design', 'Blueprints', 'GDD', 'Technical GD / RnD', 'AI / Combat'],
